@@ -37,8 +37,12 @@ router.post('/login', (req, res, next) => {
             if (error) {
               next(erorr);
             } else {
-              req.session.userID = user.id;
-              res.send('Session created');
+              if (!result) {
+                res.send('Password is not correct');
+              } else {
+                req.session.userID = user.id;
+                res.send('Session created');
+              }
             }
           });
         }
