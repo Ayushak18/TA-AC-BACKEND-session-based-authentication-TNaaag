@@ -39,9 +39,11 @@
       <% article.comments.forEach((comment,index)=>{ %>
       <div>
         <p>
-          <a href="/comments/<%= comment.id %>"
-            ><%= index+1 %>. <%= comment.comment %></a
-          >
+          <%= index+1 %>. <%= comment.comment %>
+          <div>
+            <button><a href="/comments/<%= comment.id %>">Edit </a></button>
+            <button><a href="/comments/<%= comment.id %>/delete">Delete </a></button>
+          </div>
         </p>
       </div>
       <% }) %>

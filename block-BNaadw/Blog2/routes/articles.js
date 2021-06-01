@@ -8,7 +8,11 @@ router.get('/', (req, res) => {
     if (error) {
       next(error);
     } else {
-      res.render('articles', { articles: articles });
+      if (!req.cookies['connect.sid']) {
+        res.redirect('/users/login');
+      } else {
+        res.render('articles', { articles: articles });
+      }
     }
   });
 });
@@ -27,18 +31,7 @@ router.post('/new', (req, res, next) => {
   });
 });
 
-// router.get('/:id', (req, res, next) => {
-//   let id = req.params.id;
-//   Article.findById(id, (error, article) => {
-//     if (error) {
-//       next(error);
-//     } else {
-//       res.render('singleArticle', { article: article });
-//     }
-//   });
-// });
-
-router.get('/:id', (req, res) => {
+router.get('/:id', (req, res, next) => {
   let id = req.params.id;
   Article.findById(id)
     .populate('comments')
@@ -79,7 +72,13 @@ router.get('/:id/delete', (req, res, next) => {
     if (error) {
       next(error);
     } else {
-      res.redirect('/articles');
+      Comment.remove({ articleId: article.id }, (error, comment) => {
+        if (error) {
+          next(error);
+        } else {
+          res.redirect('/articles');
+        }
+      });
     }
   });
 });
